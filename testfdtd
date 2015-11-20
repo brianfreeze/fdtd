@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Compiling fdtd.c into fdtd..."
+gcc -o fdtd fdtd.c -lm
+echo "Finished compiling fdtd"
+echo "Running fdtd.."
+./fdtd
+echo "Test complete"
