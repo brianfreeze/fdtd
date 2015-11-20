@@ -1,5 +1,6 @@
 /*Finite Dimension Time Domain Simulation
-Created by: Brian Morrison
+Created by: Brian Morrison (brianfreeze@github
+Email: Brian_Morrison@student.uml.edu
 Date Created: November 19,2015
 Date Modified: November 19,2015
 Description: This program is to simulate the expected electric and magnetic fields within an anechoic chamber using the FDTD method.
