@@ -9,6 +9,7 @@ Description: This program is to simulate the expected electric and magnetic fiel
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
 
 #define SIZE 200
 
@@ -30,11 +31,14 @@ int main()
 
   /*MAIN MENU */
   MENU:do {
+    system("clear");
+    printf("Anechoic Chamber FDTD Simulator\n");
     printf("Main Menu:\n");
-    printf("1)Change Parameters \n");
-    printf("2)Run Simulation\n");
-    printf("3)Show results\n");
-    printf("9)Exit\n");
+    printf("1) Set Parameters \n");
+    printf("2) Run Simulations\n");
+    printf("3) Show Results\n");
+    printf("9) Exit\n\n");
+    printf("Command: ");
     scanf("%d", &menu_in);
 
     switch(menu_in) {
@@ -51,6 +55,7 @@ int main()
       break;
 
     case 9:
+      printf("\nGoodbye!\n");
       goto END;
       
     default:
@@ -66,7 +71,7 @@ int main()
 
   /*Open results.dat file for writing*/
   SIMULATION:printf("\n Establishing parameters for simulation:\n");
-    printf("Creating results.dat file\n");
+  printf("Creating results.dat file\n");
   p_results=fopen("results.dat","w"); //open results.dat to write values
 
   /*Error check for opening results.dat, exit program if can't open results*/
@@ -75,10 +80,10 @@ int main()
     exit(0);
   }
   else {
-    printf("results.dat file successfully created!\n");
+    printf("results.dat file successfully created!\n\n");
   }
 
-  printf("Beginning calculations...this may take some time....\n");
+  printf("Beginning calculations...this may take some time....\n\n");
 
   /*do time stepping*/
   for (qTime=0; qTime< maxTime; qTime++) {
@@ -95,7 +100,6 @@ int main()
     ez[0] = exp(-(qTime - 30) * (qTime - 30)/ 100);
 
     /* output results to results.dat*/
-    //printf("%g\n",ez[50]); //legacy output
 
     //Print index and current Efield to results.dat and start new line
     fprintf(p_results, "%4d   %g\n", d , ez[50]);
@@ -103,20 +107,24 @@ int main()
     //Increment current step
     d++;
   } //End for loop
+
+  /*Close Results File */
   fclose(p_results); //Close results.dat file
-  printf("results.dat file successfully closed.\n");
-  goto MENU;
-  
-  
-  
-  /*PLOTTING */
-  /*Output results.dat to gnuplot*/
-  PLOT:printf("Opening gnuplot to create pretty pictures.\n Type exit to leave gnuplot and return to program.\n");
-  system("gnuplot 'gpcmd.gp' - ");
-  printf("Press any key to continue\n");
+  printf("results.dat file successfully closed.\n\n");
+
+  /*Wait for User Input before clearing screen and returning to Main Menu*/
+  printf("Press any key to continue.\n");
   getchar();
   goto MENU;
-  } while(menu_in !=4);  //End of Menu Do Loop
+     
+  /*PLOTTING */
+  /*Output results.dat to gnuplot*/
+  PLOT:printf("Opening gnuplot to create pretty pictures.\n\nType exit to leave gnuplot and return to program.\n\n");
+  system("gnuplot 'gpcmd.gp' - ");
+  printf("Press [ENTER] key to continue\n");
+  getchar();
+  goto MENU;
+  } while(menu_in !=9);  //End of Menu Do Loop
  END:return 0;
 }
 
