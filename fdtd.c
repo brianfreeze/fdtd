@@ -15,7 +15,7 @@ Description: This program is to simulate the expected electric and magnetic fiel
 int main()
 {
   double ez[SIZE] = {0}, hy[SIZE]={0}, imp0=377.0;
-  int qTime, maxTime=250,mm;
+  int qTime, maxTime=1000,mm;
   int d=0; //current step
   int menu_in; //input for main menu
 
@@ -24,7 +24,7 @@ int main()
   /*INITIALIZING THINGS USER DOESN'T SEE */
   /*Create file for commands to run gnuplots*/
   FILE *gpcmd=fopen("gpcmd.gp","wt"); //File pointer for gnuplot commands
-  fprintf(gpcmd, "plot '~/fdtd/results.dat' title 'Electric Field vs. spatial step' with lines \n");
+  fprintf(gpcmd, "plot '~/fdtd/results.dat' title 'Electric Field vs. spatial step' smooth csplines \n");
   fclose(gpcmd); //Close gpcmd file
   
 
