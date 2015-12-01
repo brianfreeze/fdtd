@@ -10,6 +10,7 @@ Description: This program is to simulate the expected electric and magnetic fiel
 #include <stdlib.h>
 #include <math.h>
 #include <unistd.h>
+#include <string.h>
 
 #define SIZE 200
 
@@ -19,8 +20,11 @@ int main()
   int qTime, maxTime=1000,mm;
   int d=0; //current step
   int menu_in, menu_in_plot; //input for menus
-  char snapdecade[10];
-  char basename[80] = "sim", filename[100];
+  char snap_file_type[4]=".dat";
+  char snap_folder[10]="snapshots/";
+  char snapdecade[10]; //Snapshot of decade input
+  char snap[200]; //Used to configure which decade to snapshot
+  char basename[4] = "sim", filename[100];
   int frame = 0;
   FILE *snapshot;
   FILE *p_results; //File pointer for results.dat
@@ -155,8 +159,16 @@ int main()
       printf("Enter decade for snapshot to plot ex:'1'=10, '2'=20\n");
       printf("Decade: ");
       scanf("%10s", snapdecade);
-      //fopen("gpsnap.gp","w+");
+      strcpy(snap,snap_folder);
+      strcat(snap,basename);
+      strcat(snap,snapdecade);
+      strcat(snap,snap_file_type);
+      printf("File to be printed: %s \n\n\n", snap);
+      /*Change GNUplot command for user-defined decade */
+      fopen("gpsnap.gp","w+");
       //fprintf(gpsnap, 
+      fprintf(gpsnap, "plot '~/fdtd/%s' title 'EField Snapshot' smooth csplines \n",snap);
+      fclose(gpsnap);
       system("gnuplot 'gpsnap.gp' - ");
       printf("Press [ENTER] key to continue\n");
       getchar();
