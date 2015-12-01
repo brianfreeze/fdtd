@@ -18,8 +18,10 @@ int main()
   double ez[SIZE] = {0}, hy[SIZE]={0}, imp0=377.0;
   int qTime, maxTime=1000,mm;
   int d=0; //current step
-  int menu_in; //input for main menu
-
+  int menu_in, menu_in_plot; //input for menus
+  char basename[80] = "sim", filename[100];
+  int frame = 0;
+  FILE *snapshot;
   FILE *p_results; //File pointer for results.dat
 
   /*INITIALIZING THINGS USER DOESN'T SEE */
@@ -97,13 +99,22 @@ int main()
       ez[mm]=ez[mm]+(hy[mm]-hy[mm-1])*imp0;
 
     /*hardwired source e^-((qTime-30)*(qTime-30)/100) */
-    ez[0] = exp(-(qTime - 30) * (qTime - 30)/ 100);
+    //ez[0] = exp(-(qTime - 30) * (qTime - 30)/ 100);
 
+    /*use additive source located at node 50*/
+    ez[50] += exp(-(qTime-30)*(qTime-30)/100);
     /* output results to results.dat*/
-
     //Print index and current Efield to results.dat and start new line
     fprintf(p_results, "%4d   %g\n", d , ez[50]);
 
+    /*Output for snapshots*/
+    if (qTime % 10 ==0) {
+      sprintf(filename, "snapshots/%s%d.dat", basename, frame++);
+      snapshot=fopen(filename, "w");
+      for (mm=0; mm<SIZE;mm++)
+	fprintf(snapshot, "%4d %g\n", mm, ez[mm]);
+      fclose(snapshot);
+    }
     //Increment current step
     d++;
   } //End for loop
@@ -118,13 +129,39 @@ int main()
   goto MENU;
      
   /*PLOTTING */
-  /*Output results.dat to gnuplot*/
-  PLOT:printf("Opening gnuplot to create pretty pictures.\n\nType exit to leave gnuplot and return to program.\n\n");
-  system("gnuplot 'gpcmd.gp' - ");
-  printf("Press [ENTER] key to continue\n");
-  getchar();
-  goto MENU;
-  } while(menu_in !=9);  //End of Menu Do Loop
+  PLOT:do {
+    printf("Output Menu\n");
+    printf("1) Print results.dat\n");
+    printf("2) Print snapshot at a decade\n");
+    printf("3) Exit\n");
+    printf("Command: ");
+    scanf("%d", &menu_in_plot);
+
+    switch(menu_in_plot) {
+    case 1:
+      /* Output results.dat file to GNu plot*/
+      printf("Opening gnuplot to create pretty pictures.\n\nType exit to leave gnuplot and return to program.\n\n");
+      system("gnuplot 'gpcmd.gp' - ");
+      printf("Press [ENTER] key to continue\n");
+      getchar();
+      goto PLOT;
+      break;
+    case 2:
+      //MENU FOR WHICH DECADE
+      printf("Press [ENTER] key to continue\n");
+      getchar();
+      goto PLOT;
+      break;
+    case 3:
+      goto MENU;
+      break;
+    default:
+      printf("Enter a valid command.\n");
+      goto PLOT;
+      break;
+    } //End of Switch statement for Plotting Menu
+  } while(menu_in_plot !=9);//End of Plotting Menu Do Loop
+  } while(menu_in !=9);  //End of Main Menu Do Loop
  END:return 0;
 }
 

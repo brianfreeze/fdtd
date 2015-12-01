@@ -18,7 +18,7 @@ int main()
   double ez[SIZE] = {0}, hy[SIZE]={0}, imp0=377.0;
   int qTime, maxTime=1000,mm;
   int d=0; //current step
-  char menu_in; //input for main menu
+  int menu_in; //input for main menu
 
   FILE *p_results; //File pointer for results.dat
 
@@ -39,7 +39,7 @@ int main()
     printf("3) Show Results\n");
     printf("9) Exit\n\n");
     printf("Command: ");
-    menu_in = getc("%d", &menu_in);
+    scanf("%d", &menu_in);
 
     switch(menu_in) {
     case 1:
@@ -70,7 +70,15 @@ int main()
   /*SIMULATION */
 
   /*Open results.dat file for writing*/
-  SIMULATION:printf("\n Establishing parameters for simulation:\n");
+  SIMULATION:do {
+    system("clear");
+    printf("Simulation Menu\n");
+    printf("1) 1-D Simulation\n");
+    printf("2) 1-D Snapshot
+    }
+    
+    /*2-D Simulation*/
+  printf("\n Establishing parameters for simulation:\n");
   printf("Creating results.dat file\n");
   p_results=fopen("results.dat","w"); //open results.dat to write values
 
