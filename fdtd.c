@@ -133,7 +133,7 @@ int main()
     printf("Output Menu\n");
     printf("1) Print results.dat\n");
     printf("2) Print snapshot at a decade\n");
-    printf("3) Exit\n");
+    printf("9) Exit to Main Menu\n");
     printf("Command: ");
     scanf("%d", &menu_in_plot);
 
@@ -152,7 +152,7 @@ int main()
       getchar();
       goto PLOT;
       break;
-    case 3:
+    case 9:
       goto MENU;
       break;
     default:
