@@ -19,6 +19,7 @@ int main()
   int qTime, maxTime=1000,mm;
   int d=0; //current step
   int menu_in, menu_in_plot; //input for menus
+  char snapdecade[10];
   char basename[80] = "sim", filename[100];
   int frame = 0;
   FILE *snapshot;
@@ -27,8 +28,11 @@ int main()
   /*INITIALIZING THINGS USER DOESN'T SEE */
   /*Create file for commands to run gnuplots*/
   FILE *gpcmd=fopen("gpcmd.gp","wt"); //File pointer for gnuplot commands
+  FILE *gpsnap=fopen("gpsnap.gp","w+");
   fprintf(gpcmd, "plot '~/fdtd/results.dat' title 'Electric Field vs. spatial step' smooth csplines \n");
+  fprintf(gpsnap, "plot '~/fdtd/snapshots/sim0.dat' title 'EField Snapshot' smooth csplines \n");
   fclose(gpcmd); //Close gpcmd file
+  fclose(gpsnap); 
   
 
   /*MAIN MENU */
@@ -148,6 +152,12 @@ int main()
       break;
     case 2:
       //MENU FOR WHICH DECADE
+      printf("Enter decade for snapshot to plot ex:'1'=10, '2'=20\n");
+      printf("Decade: ");
+      scanf("%10s", snapdecade);
+      //fopen("gpsnap.gp","w+");
+      //fprintf(gpsnap, 
+      system("gnuplot 'gpsnap.gp' - ");
       printf("Press [ENTER] key to continue\n");
       getchar();
       goto PLOT;
